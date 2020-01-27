@@ -1,6 +1,83 @@
 """
 	$(SIGNATURES)
 
+Given a path and several base directories, return that path hanging off each of the base directories.
+
+# Arguments
+- srcPath :: String
+    Absolute or relative path. If absolute, it must include one of the base directories.
+"""
+
+function common_base_dir(srcPath :: String, baseDirV :: Vector{String})
+    @assert length(baseDirV) >= 1
+    @assert all(isabspath.(baseDirV)) "All base directories must be absolute paths"
+
+    # Find which baseDir we match.
+    relPath = "";
+    if isabspath(srcPath)
+        found = false;
+        for baseDir in baseDirV
+            if startswith(srcPath, baseDir)
+                relPath = relpath(srcPath, baseDir);    	
+                found = true;
+                break;
+            end
+        end
+        if !found
+			error("srcPath must be inside a base directory:  $srcPath")
+        end
+    else
+        relPath = srcPath;
+    end
+    
+    outDirV = similar(baseDirV);
+    for (j, baseDir) in enumerate(baseDirV)
+        outDirV[j] = joinpath(baseDir, relPath);
+    end
+
+	return outDirV
+end
+
+
+"""
+	$(SIGNATURES)
+
+Make a pair of local and remote paths, both in the same location relative to homedir().
+
+# Arguments
+- srcPath
+	can be absolute path on either machine or relative to `homedir()`
+"""
+function remote_and_local_path(srcPath :: String; 
+	srcComp = defaultLocal,  tgComp = defaultRemote)
+	
+	srcComp = get_computer(srcComp);
+    tgComp = get_computer(tgComp);
+    
+    outDirV = common_base_dir(srcPath,  [srcComp.homeDir, tgComp.homeDir]);
+    localDir = outDirV[1];
+    remoteDir = outDirV[2];
+	
+	# # Make path relative to home on whatever machine it matches.
+    # if isabspath(srcPath)
+    # 	if startswith(srcPath, srcComp.homeDir)
+	# 		srcPath = relpath(srcPath, srcComp.homeDir);    	
+	# 	elseif startswith(srcPath, tgComp.homeDir)
+	# 		srcPath = relpath(srcPath, tgComp.homeDir);    	
+	# 	else
+	# 		error("srcPath must be inside home directory:  $srcPath")
+	# 	end
+	# end
+
+    # localDir = joinpath(srcComp.homeDir, srcPath);
+    # remoteDir = joinpath(tgComp.homeDir, srcPath);
+	return localDir, remoteDir
+end
+
+
+"""
+	$(SIGNATURES)
+
 Copy a file between local and remote computer using `scp`.
 
 Syntax

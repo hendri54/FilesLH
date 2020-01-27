@@ -15,6 +15,9 @@ computerLongleaf = Computer(name = :longleaf,
 	sshStr = "lhendri@longleaf.unc.edu",
 	isRemote = true);
 
+defaultLocal = :LH;
+defaultRemote = :longleaf;
+
 
 """
 	$(SIGNATURES)
