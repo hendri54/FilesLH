@@ -92,9 +92,9 @@ function remote_copy(localPath :: String, remotePath :: String, sshStr :: String
 	upDown :: Symbol; trialRun :: Bool = false)
 
 	if upDown == :up
-		rcCmd = `scp $localPath $sshStr$remotePath`
+		rcCmd = `scp $localPath $(sshStr):$(remotePath)`
 	elseif upDown == :down
-		rcCmd = `scp $sshStr$localPath $remotePath`
+		rcCmd = `scp $(sshStr):$(remotePath) $localPath`
 	else
 		error("Invalid direction: $upDown")
 	end
@@ -119,13 +119,13 @@ Fails if local or remote paths contain spaces.
     Source and target directories.
     Remote directory must include part required for `ssh` (e.g. `lhendri@longleaf.unc.edu:`)
 - `doDelete` :: Bool
-    Should orphan files be deleted on target? `True` by default.
+    Should orphan files be deleted on target? `False` by default.
 
 #ToDo: How to make the interpolation work when there are quotes around the objects?
 #ToDo: Hard wired file separator
 """
 function rsync_command(srcDirIn :: String, tgDirIn :: String;
-    trialRun :: Bool = false, doDelete :: Bool = true)
+    trialRun :: Bool = false, doDelete :: Bool = false)
 
 	# This ensures that `srcDir` ends in `/`
     srcDir = joinpath(srcDirIn, "");
@@ -160,9 +160,10 @@ end
 	$(SIGNATURES)
 
 Transfer a directory to remote using rsync.
+`delete` is by default off.
 """
 function rsync_dir(srcDir :: String, tgDir :: String; 
-    trialRun :: Bool = false, doDelete :: Bool = true)
+    trialRun :: Bool = false, doDelete :: Bool = false)
 
 	rCmd = rsync_command(srcDir,  tgDir,  trialRun = trialRun,  doDelete = doDelete);
 	show(rCmd);
