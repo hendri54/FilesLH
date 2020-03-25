@@ -48,21 +48,22 @@ Write the `#SBATCH` portion of an sbatch file and the "export number of threads"
 	in KB
 """
 function sbatch_commands(outPath :: String;
-	timeStr :: String = "3-00",  nNodes :: Int = 1,  nCores :: Int = 1,  memPerCpu :: Int = 16000,
+	timeStr :: String = "3-00",  nNodes :: Int = 1,  nCores :: Int = 1,  
+	memPerCpu :: Int = 16000,
 	emailStr = "lhendri@email.unc.edu")
 
 	lineV = [
-		"#!/bin/bash \n\n",
-		"#SBATCH -N $nNodes \n", 
-		"#SBATCH -n $nCores \n",
-		"#SBATCH -t $timeStr \n",
-		"#SBATCH -p general \n",
-		"#SBATCH --mem-per-cpu $memPerCpu \n",
-		"#SBATCH -o '$outPath' \n",
-		"#SBATCH --mail-type=end \n",
-		"#SBATCH --mail-user=$emailStr \n",
-		"\n",
-		"export JULIA_NUM_THREADS=$nCores \n"
+		"#!/bin/bash \n",
+		"#SBATCH -N $nNodes ", 
+		"#SBATCH -n $nCores ",
+		"#SBATCH -t $timeStr ",
+		"#SBATCH -p general ",
+		"#SBATCH --mem-per-cpu $memPerCpu ",
+		"#SBATCH -o '$outPath' ",
+		"#SBATCH --mail-type=end ",
+		"#SBATCH --mail-user=$emailStr ",
+		" ",
+		"export JULIA_NUM_THREADS=$nCores "
 	];
 	return lineV
 end

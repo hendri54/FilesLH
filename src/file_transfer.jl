@@ -78,6 +78,33 @@ end
 """
 	$(SIGNATURES)
 
+Make a directory on the remote, optionally creating all parents as well.
+Creates a command of the form
+`ssh lhendri@longleaf.unc.edu 'mkdir -p ~/home/abc'`.
+Shows on-screen error if the directory already exists.
+"""
+function make_remote_dir(remoteDir :: String,  sshStr :: String;
+    trialRun :: Bool = false, createParents :: Bool = true)
+
+    if createParents
+        pStr = " -p";
+    else
+        pStr = " ";
+    end
+    rcCmd = `ssh $sshStr mkdir $pStr $remoteDir`;
+
+    if trialRun
+        println(rcCmd);
+    else
+        run(rcCmd);
+    end
+    return rcCmd
+end
+
+
+"""
+	$(SIGNATURES)
+
 Copy a file between local and remote computer using `scp`.
 
 Syntax

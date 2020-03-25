@@ -38,11 +38,12 @@ function file_transfer_test()
         @test isa(cmdDown, Cmd)
 
 
+        # This creates unreasonable amounts of output. Redirect or change dir +++
         test_header("Rsync")
         rsCmd = rsync_command(srcDir, tgDir, trialRun = true);
         @test isa(rsCmd, Cmd);
 
-        rsCmd = rsync_dir(srcDir, tgDir, trialRun = true);
+        rsCmd = FilesLH.rsync_dir(srcDir, tgDir, trialRun = true);
         @test isa(rsCmd, Cmd);
 
 

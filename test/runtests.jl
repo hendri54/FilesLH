@@ -3,18 +3,7 @@ using Test
 
 # ------------  Helpers
 
-function test_header(hdStr)
-    println("-----  Testing $hdStr")
-end
-
-function test_file_dir()
-    return joinpath(@__DIR__, "test_files")
-end
-
-if !isdir(test_file_dir())
-    mkdir(test_file_dir())
-end
-
+include("test_setup.jl")
 
 # --------  Tests
 
@@ -26,6 +15,7 @@ include("sbatch_test.jl")
     file_transfer_test()
     computer_test()
     sbatch_test()
+    include("file_names_test.jl")
 end
 
 # ----------------

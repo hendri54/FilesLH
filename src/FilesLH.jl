@@ -3,6 +3,8 @@ module FilesLH
 using ArgCheck, DocStringExtensions, Parameters
 import Base.show
 
+# File names
+export filesep, paths_equal
 # File transfer
 export remote_copy, rsync_command, rsync_dir, git_upload_dir
 # Computers
@@ -13,8 +15,9 @@ export add_computer, remove_computer, current_computer, get_computer
 # Slurm
 export sbatch_commands
 
-include("file_transfer.jl")
 include("computers.jl")
+include("file_names.jl")
+include("file_transfer.jl")
 include("sbatch.jl")
 
 end # module
