@@ -2,9 +2,10 @@ module FilesLH
 
 using ArgCheck, DocStringExtensions, Parameters
 import Base.show
+import CommonLH: ask_yes_no
 
 # Directories
-export clear_directory
+export clear_directory, is_dir_empty
 # File names
 export filesep, paths_equal
 # File transfer
