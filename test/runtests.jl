@@ -15,6 +15,7 @@ include("sbatch_test.jl")
     file_transfer_test()
     computer_test()
     sbatch_test()
+    # include("directories_test.jl")
     include("file_names_test.jl")
 end
 

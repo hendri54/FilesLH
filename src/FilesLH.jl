@@ -3,6 +3,8 @@ module FilesLH
 using ArgCheck, DocStringExtensions, Parameters
 import Base.show
 
+# Directories
+export clear_directory
 # File names
 export filesep, paths_equal
 # File transfer
@@ -16,6 +18,7 @@ export add_computer, remove_computer, current_computer, get_computer
 export sbatch_commands
 
 include("computers.jl")
+include("directories.jl")
 include("file_names.jl")
 include("file_transfer.jl")
 include("sbatch.jl")
