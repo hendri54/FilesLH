@@ -5,7 +5,7 @@ import Base.show
 import CommonLH: ask_yes_no
 
 # Directories
-export clear_directory, is_dir_empty
+export clear_directory, is_dir_empty, files_in_dir, files_not_in_dir2, find_common_base_dir, dir_diff_report
 # File names
 export filesep, paths_equal
 # File transfer

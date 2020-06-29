@@ -11,6 +11,6 @@ makedocs(
     # checkdocs = :exports,
 )
 
-deploydocs(
-    repo = "github.com/hendri54/FilesLH.jl.git",
-)
+# deploydocs(
+#     repo = "github.com/hendri54/FilesLH.jl.git",
+# )

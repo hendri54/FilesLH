@@ -24,4 +24,98 @@ Is a directory empty?
 """
 is_dir_empty(d :: AbstractString) = isempty(readdir(d));
 
+
+"""
+	$(SIGNATURES)
+
+Find common base directory for a set of absolute paths.
+"""
+function find_common_base_dir(pathV :: AbstractVector{T}) where T <: AbstractString
+    cbd = pathV[1];
+    for j = 2 : length(pathV)
+        cbd = find_common_base_dir(cbd, pathV[j]);
+    end
+    return cbd
+end
+
+function find_common_base_dir(d1, d2)
+    if isempty(d1) || isempty(d2)
+        return nothing
+    end
+
+    p1V = splitpath(d1);
+    p2V = splitpath(d2);
+    n = min(length(p1V), length(p2V));
+    jd = findfirst(j -> !isequal(p1V[j], p2V[j]), 1 : n);
+
+    if isnothing(jd)
+        jd = n+1;
+    end
+    return joinpath(p1V[1 : (jd-1)]...)
+end
+
+
+"""
+	$(SIGNATURES)
+
+Make a list of all files in a given directory. Recurses sub-directories. Each line is of the form "subdir/file.ext"
+"""
+function files_in_dir(d :: AbstractString)
+    fList = Vector{String}();
+    for (root, _, files) in walkdir(d)
+        subDir = relpath(root, d);
+        if subDir == "."
+            subDir = "";
+        end
+        for file in files
+            push!(fList, joinpath(subDir, file));
+        end
+    end
+    return fList
+end
+
+
+"""
+	$(SIGNATURES)
+
+Make a list of files that occur in dir1, but not in dir2. Recurses sub-directories. Only compares file names.
+"""
+function files_not_in_dir2(dir1 :: AbstractString, dir2 :: AbstractString)
+    fList1 = files_in_dir(dir1);
+    fList2 = files_in_dir(dir2);
+    missList = Vector{String}();
+    for f in fList1
+        if !(f ∈ fList2)
+            push!(missList, f);
+        end
+    end
+    return missList
+end
+
+
+"""
+	$(SIGNATURES)
+
+Report differences between two directories and their sub-directories. Based on file names only.
+"""
+function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString)
+    cbd = find_common_base_dir(dir1, dir2);
+    @assert !isnothing(cbd)  "Must have common base dir"
+    miss2V = files_not_in_dir2(dir1, dir2);
+    miss1V = files_not_in_dir2(dir2, dir1);
+    println("\nComparing files by name in base directory\n  ",  cbd);
+
+    relDir1 = relpath(dir1, cbd);
+    println("Files missing in $relDir1:");
+    for f in miss1V
+        println("  $f");
+    end
+    relDir2 = relpath(dir2, cbd);
+    println("Files missing in $relDir2:");
+    for f in miss2V
+        println("  $f");
+    end
+    println("----------")
+end
+
 # --------------
