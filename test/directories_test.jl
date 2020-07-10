@@ -1,3 +1,12 @@
+function make_dir_test()
+    @testset "Make dir" begin
+        d = joinpath(test_file_dir(), "make_dir_test");
+        isdir(d)  &&  rm(d);
+        make_dir(d);
+        @test isdir(d);
+    end
+end
+
 function files_in_dir_test()
     @testset "files in dir" begin
         d = @__DIR__;

@@ -20,6 +20,19 @@ end
 """
 	$(SIGNATURES)
 
+Make a directory for a full path.
+
+    test this +++++
+"""
+function make_dir(d :: AbstractString)
+    fDir, _ = splitdir(d);
+    isdir(fDir)  ||  mkpath(fDir);
+end
+
+
+"""
+	$(SIGNATURES)
+
 Is a directory empty?
 """
 is_dir_empty(d :: AbstractString) = isempty(readdir(d));
