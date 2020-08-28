@@ -41,6 +41,37 @@ is_dir_empty(d :: AbstractString) = isempty(readdir(d));
 """
 	$(SIGNATURES)
 
+Return a string with the `nDirs` "rightmost" directories. 
+
+# Example
+```
+right_dirs("/abc/def/ghi/", 2) == "def/ghi"
+```
+"""
+function right_dirs(d :: AbstractString, nDirs :: Integer)
+    # Locations of interior file separators
+    # idxV = findall(j -> d[j] == filesep(), 2 : (length(d) - 1));
+    # if length(idxV) < nDirs 
+    #     pd = d;
+    # else
+    #     idx1 = idxV[length(idxV) - nDirs] + 1;
+    #     pd = d[idx1 : end];
+    # end
+    pV = splitpath(d);
+    n = length(pV);
+    if n > nDirs
+        idxV = max(1, n - nDirs + 1) : n;
+        pd = joinpath(pV[idxV]...);
+    else
+        pd = rstrip(d, filesep());
+    end
+    return pd
+end
+
+
+"""
+	$(SIGNATURES)
+
 Find common base directory for a set of absolute paths.
 """
 function find_common_base_dir(pathV :: AbstractVector{T}) where T <: AbstractString
@@ -111,24 +142,24 @@ end
 
 Report differences between two directories and their sub-directories. Based on file names only.
 """
-function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString)
+function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString; io = stdout)
     cbd = find_common_base_dir(dir1, dir2);
     @assert !isnothing(cbd)  "Must have common base dir"
     miss2V = files_not_in_dir2(dir1, dir2);
     miss1V = files_not_in_dir2(dir2, dir1);
-    println("\nComparing files by name in base directory\n  ",  cbd);
+    println(io, "\nComparing files by name in base directory\n  ",  cbd);
 
     relDir1 = relpath(dir1, cbd);
-    println("Files missing in $relDir1:");
+    println(io, "Files missing in $relDir1:");
     for f in miss1V
-        println("  $f");
+        println(io, "  $f");
     end
     relDir2 = relpath(dir2, cbd);
-    println("Files missing in $relDir2:");
+    println(io, "Files missing in $relDir2:");
     for f in miss2V
-        println("  $f");
+        println(io, "  $f");
     end
-    println("----------")
+    println(io, "----------")
 end
 
 # --------------

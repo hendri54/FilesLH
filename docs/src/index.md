@@ -23,4 +23,14 @@ filesep
 paths_equal
 ```
 
+# File Transfer
+
+```@docs
+rsync_command
+rsync_dir
+remote_copy
+make_remote_dir
+git_upload_dir
+```
+
 ---------------

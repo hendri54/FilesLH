@@ -40,10 +40,14 @@ function file_transfer_test()
 
         # This creates unreasonable amounts of output. Redirect or change dir +++
         test_header("Rsync")
-        rsCmd = rsync_command(srcDir, tgDir, trialRun = true);
+        rsCmd = rsync_command(srcDir, tgDir; trialRun = true, verbose = false,
+            excludeV = "abc/test.txt");
+        @test isa(rsCmd, Cmd);
+        rsCmd = rsync_command(srcDir, tgDir; trialRun = true, verbose = false,
+            excludeV = ["abc/test.txt", "def/ghi"]);
         @test isa(rsCmd, Cmd);
 
-        rsCmd = FilesLH.rsync_dir(srcDir, tgDir, trialRun = true);
+        rsCmd = FilesLH.rsync_dir(srcDir, tgDir; trialRun = true, verbose = false);
         @test isa(rsCmd, Cmd);
 
 

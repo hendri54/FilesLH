@@ -1,13 +1,44 @@
 """
 	$(SIGNATURES)
 
+Deploy package docs to my website.
+
+This is to be included in each package's `make.jl`. The benefit over hosting on github is to work around issues with private repos and private registries that would arise when TravisCI is used.
+
+# Example
+```
+# This gives the package directory, if called from `docs/make.jl`.
+pkgDir = rstrip(normpath(@__DIR__, ".."), '/');
+@assert endswith(pkgDir, "FilesLH")
+deploy_docs(pkgDir);
+```
+
+# Arguments
+- `pkgDir`: points to package directory. If `pkgDir = /a/b/Foo` the docs end up in `julia/Foo` on my website.
+"""
+function deploy_docs(pkgDir :: AbstractString; 
+    trialRun :: Bool = true,
+    tgBaseDir :: AbstractString = "/Users/lutz/Documents/data/web/hendri54.github.io/julia/")
+
+    pkgName = basename(pkgDir);
+    srcDir = joinpath(pkgDir, "docs", "build");
+    @assert isdir(srcDir);
+    tgDir = joinpath(tgBaseDir, pkgName);
+    cm = rsync_command(srcDir, tgDir; trialRun = trialRun,
+        doDelete = true,  inclSubDirs = true);
+    run(cm);
+end
+
+
+"""
+	$(SIGNATURES)
+
 Given a path and several base directories, return that path hanging off each of the base directories.
 
 # Arguments
 - srcPath :: String
     Absolute or relative path. If absolute, it must include one of the base directories.
 """
-
 function common_base_dir(srcPath :: String, baseDirV :: Vector{String})
     @assert length(baseDirV) >= 1
     @assert all(isabspath.(baseDirV)) "All base directories must be absolute paths"
@@ -82,6 +113,15 @@ Make a directory on the remote, optionally creating all parents as well.
 Creates a command of the form
 `ssh lhendri@longleaf.unc.edu 'mkdir -p ~/home/abc'`.
 Shows on-screen error if the directory already exists.
+
+Generates on-screen output from ssh login.
+
+Note that other shell commands can be run with the same syntax.
+
+See https://unix.stackexchange.com/questions/8612/programmatically-creating-a-remote-directory-using-ssh
+
+# Arguments
+- `sshStr`: e.g. "lhendri@longleaf.unc.edu
 """
 function make_remote_dir(remoteDir :: String,  sshStr :: String;
     trialRun :: Bool = false, createParents :: Bool = true)
@@ -106,10 +146,11 @@ end
 	$(SIGNATURES)
 
 Copy a file between local and remote computer using `scp`.
+`scp` replaces existing files without warning.
 
 Syntax
 
-	`scp /path/local lhendri@longleaf.unc.edu/path/remote`
+	`scp /path/local lhendri@longleaf.unc.edu:/path/remote`
 
 # Arguments
 - sshStr :: String
@@ -137,7 +178,7 @@ end
 """
     $(SIGNATURES)
 
-Rsync to or from remote machine.
+Rsync to or from remote machine. Only for directories.
 
 Fails if local or remote paths contain spaces.
 
@@ -147,22 +188,24 @@ Fails if local or remote paths contain spaces.
     Remote directory must include part required for `ssh` (e.g. `lhendri@longleaf.unc.edu:`)
 - `doDelete` :: Bool
     Should orphan files be deleted on target? `False` by default.
+- `trialRun` :: Bool
+- `progress` :: Bool
+    Show progress indicator
 
 #ToDo: How to make the interpolation work when there are quotes around the objects?
-#ToDo: Hard wired file separator
 """
 function rsync_command(srcDirIn :: String, tgDirIn :: String;
-    trialRun :: Bool = false, doDelete :: Bool = false)
+    trialRun :: Bool = false, doDelete :: Bool = false,
+    doCompress :: Bool = true, verbose :: Bool = true,
+    inclSubDirs :: Bool = true, progress :: Bool = false,
+    excludeV = nothing)
 
 	# This ensures that `srcDir` ends in `/`
     srcDir = joinpath(srcDirIn, "");
-    @assert srcDir[end] == '/'
+    @assert srcDir[end] == filesep();
 
     # Ensure that remote dir does NOT end in "/"
-    tgDir = tgDirIn;
-    if tgDir[end] == '/'
-    	tgDir = tgDir[1 : (end-1)];
-    end
+    tgDir = rstrip(tgDirIn, filesep());
 
     # Need to concatenate commands, not strings for interpolation to work.
     if doDelete
@@ -170,16 +213,50 @@ function rsync_command(srcDirIn :: String, tgDirIn :: String;
     else
         deleteStr = ``;
     end
-    if trialRun
-        trialStr = ` -n`;
-    else
-        trialStr = ``;
-    end
 
-    switchStr = `-atuzv $trialStr $deleteStr`;
+    # Switches
+    switchV = Vector{Char}();
+    trialRun  &&  push!(switchV, 'n');
+    doCompress &&  push!(switchV, 'z');
+    verbose &&  push!(switchV, 'v');
+    inclSubDirs  &&  push!(switchV, 'a');
+    progress  &&  push!(switchV, 'P');
+    vecStr = *(switchV...);
+    switchStr = ` -tu$vecStr `;
 
-    cmdStr = `rsync $switchStr --exclude .git $srcDir $tgDir`;
+    exclCmd = exclude_commands(excludeV);
+
+    cmdStr = `rsync $switchStr $deleteStr $exclCmd --exclude .git $srcDir $tgDir`;
 	return cmdStr
+end
+
+
+exclude_commands(exclV :: Nothing) = ``;
+exclude_commands(exclV :: AbstractString) = `--exclude $exclV`;
+function exclude_commands(exclV) 
+    if isempty(exclV) 
+        return ``;
+    end
+    cmdV = [`--exclude $x` for x in exclV];
+    return cat_commands(cmdV);
+end
+
+# function exclude_command(x)
+#     return `--exclude $x`;
+# end
+
+# Concatenate several commands
+function cat_commands(cmdV :: Vector{Cmd})
+    if isempty(cmdV)
+        return ``
+    end
+    c = cmdV[1];
+    if length(cmdV) > 1
+        for j = 2 : length(cmdV)
+            c = `$c $(cmdV[j])`;
+        end
+    end
+    return c
 end
 
 
@@ -189,11 +266,11 @@ end
 Transfer a directory to remote using rsync.
 `delete` is by default off.
 """
-function rsync_dir(srcDir :: String, tgDir :: String; 
-    trialRun :: Bool = false, doDelete :: Bool = false)
+function rsync_dir(srcDir :: String, tgDir :: String; kwargs...)
+    # trialRun :: Bool = false, doDelete :: Bool = false)
 
-	rCmd = rsync_command(srcDir,  tgDir,  trialRun = trialRun,  doDelete = doDelete);
-	show(rCmd);
+	rCmd = rsync_command(srcDir,  tgDir; kwargs...);
+	println(rCmd);
 	# `trialRun` is built into the command
     run(rCmd);
     return rCmd

@@ -1,9 +1,23 @@
+using FilesLH, Test
+
 function make_dir_test()
     @testset "Make dir" begin
         d = joinpath(test_file_dir(), "make_dir_test");
         isdir(d)  &&  rm(d);
         make_dir(d);
         @test isdir(d);
+    end
+end
+
+
+function right_dirs_test()
+    @testset "Parent dirs" begin
+        @test right_dirs("abc", 1) == "abc"
+        @test right_dirs("/abc", 1) == "abc"
+        @test right_dirs("/abc", 2) == "/abc"
+        @test right_dirs("abc/def", 1) == "def"
+        @test right_dirs("abc/d/ef/", 2) == "d/ef"
+        @test right_dirs("abc/d/ef/", 4) == "abc/d/ef"
     end
 end
 
@@ -48,6 +62,7 @@ end
     @test isdir(tgDir)
     @test is_dir_empty(tgDir)
 
+    right_dirs_test();
     files_in_dir_test()
     find_common_base_dir_test()
 end
