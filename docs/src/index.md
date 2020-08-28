@@ -26,6 +26,7 @@ paths_equal
 # File Transfer
 
 ```@docs
+deploy_docs
 rsync_command
 rsync_dir
 remote_copy

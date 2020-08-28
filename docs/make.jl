@@ -12,7 +12,6 @@ makedocs(
 )
 
 pkgDir = rstrip(normpath(@__DIR__, ".."), '/');
-println(pkgDir)
 @assert endswith(pkgDir, "FilesLH")
 deploy_docs(pkgDir);
 
