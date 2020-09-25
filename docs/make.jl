@@ -1,3 +1,5 @@
+Pkg.activate("./docs");
+
 using Documenter, FilesLH
 
 makedocs(
@@ -14,6 +16,9 @@ makedocs(
 pkgDir = rstrip(normpath(@__DIR__, ".."), '/');
 @assert endswith(pkgDir, "FilesLH")
 deploy_docs(pkgDir);
+
+Pkg.activate(".");
+
 
 # deploydocs(
 #     repo = "github.com/hendri54/FilesLH.jl.git",

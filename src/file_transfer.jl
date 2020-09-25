@@ -17,7 +17,7 @@ deploy_docs(pkgDir);
 - `pkgDir`: points to package directory. If `pkgDir = /a/b/Foo` the docs end up in `julia/Foo` on my website.
 """
 function deploy_docs(pkgDir :: AbstractString; 
-    trialRun :: Bool = true,
+    trialRun :: Bool = false,
     tgBaseDir :: AbstractString = "/Users/lutz/Documents/data/web/hendri54.github.io/julia/")
 
     pkgName = basename(pkgDir);

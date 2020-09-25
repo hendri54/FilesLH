@@ -20,13 +20,18 @@ end
 """
 	$(SIGNATURES)
 
-Make a directory for a full path.
+Make a directory for a full path, if it does not already exist. Input `d` is a file path which may include name and extension. Also creates (using `mkpath`) intermediate directories.
 
-    test this +++++
+# Example
+```
+make_dir("/abc/def/ghi.txt") # makes "/abc/def"
+```
 """
 function make_dir(d :: AbstractString)
     fDir, _ = splitdir(d);
-    isdir(fDir)  ||  mkpath(fDir);
+    if !isempty(fDir)
+        isdir(fDir)  ||  mkpath(fDir);
+    end
 end
 
 
