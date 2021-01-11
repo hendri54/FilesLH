@@ -46,11 +46,12 @@ is_dir_empty(d :: AbstractString) = isempty(readdir(d));
 """
 	$(SIGNATURES)
 
-Return a string with the `nDirs` "rightmost" directories. 
+Return a string with the `nDirs` "rightmost" directories. Note that the right most "directly" is the file name if the input string contains one.
 
 # Example
 ```
 right_dirs("/abc/def/ghi/", 2) == "def/ghi"
+right_dirs("abc/def/ghi.jl", 2) == "def/ghi.jl"
 ```
 """
 function right_dirs(d :: AbstractString, nDirs :: Integer)
@@ -146,12 +147,23 @@ end
 	$(SIGNATURES)
 
 Report differences between two directories and their sub-directories. Based on file names only.
+
+# Arguments
+- `dir1`, `dir2`: Directories to be compared.
+- `io`: where output is to be written
+- `exclude`: case sensitive substrings to be excluded
+
+# Example
+```julia
+dir_diff_report("my/dir1", "my/dir2"; io = stdout, exclude = ["_not", "Drop"])
+```
 """
-function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString; io = stdout)
+function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString; 
+    io = stdout, exclude = :nothing)
     cbd = find_common_base_dir(dir1, dir2);
     @assert !isnothing(cbd)  "Must have common base dir"
-    miss2V = files_not_in_dir2(dir1, dir2);
-    miss1V = files_not_in_dir2(dir2, dir1);
+    miss2V = filter_excludes!(files_not_in_dir2(dir1, dir2), exclude);
+    miss1V = filter_excludes!(files_not_in_dir2(dir2, dir1), exclude);
     println(io, "\nComparing files by name in base directory\n  ",  cbd);
 
     relDir1 = relpath(dir1, cbd);
@@ -166,5 +178,26 @@ function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString; io = st
     end
     println(io, "----------")
 end
+
+
+"""
+	$(SIGNATURES)
+
+Given a vector `v`, drop entries that contain any of the values in `exclude`.
+"""
+function filter_excludes!(v, exclude :: AbstractVector{T}) where T
+    if !isnothing(exclude)
+        keepV = trues(size(v));
+        for excl in exclude
+            filter_excludes!(v, excl);
+            println(excl)
+            println(v)
+        end
+    end
+    return nothing
+end
+
+filter_excludes!(v, exclude :: AbstractString) = 
+    filter!(x -> !contains(x, exclude), v);
 
 # --------------

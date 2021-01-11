@@ -36,6 +36,25 @@ function files_in_dir_test()
 end
 
 
+# This test just the filtering of excluded strings. 
+# Should also test `dir_diff_report` directly +++
+function filter_excludes_test()
+    @testset "filter excludes" begin
+        v = ["a", "abc", "abcdef", "cdefg"];
+        v2 = copy(v);
+        FilesLH.filter_excludes!(v2, "cb");
+        @test v == v2
+
+        FilesLH.filter_excludes!(v2, "ab");
+        @test v2 == v[[1,4]];
+
+        v2 = copy(v);
+        FilesLH.filter_excludes!(v2, ["ab", "ba"]);
+        @test v2 == v[[1,4]];
+	end
+end
+
+
 function find_common_base_dir_test()
     @testset "Common base dir" begin
         d1 = "/a/bc/def/ghk";
@@ -65,6 +84,7 @@ end
     right_dirs_test();
     files_in_dir_test()
     find_common_base_dir_test()
+    filter_excludes_test();
 end
 
 # -------------
