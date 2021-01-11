@@ -162,8 +162,10 @@ function dir_diff_report(dir1 :: AbstractString, dir2 :: AbstractString;
     io = stdout, exclude = :nothing)
     cbd = find_common_base_dir(dir1, dir2);
     @assert !isnothing(cbd)  "Must have common base dir"
-    miss2V = filter_excludes!(files_not_in_dir2(dir1, dir2), exclude);
-    miss1V = filter_excludes!(files_not_in_dir2(dir2, dir1), exclude);
+    miss2V = files_not_in_dir2(dir1, dir2);
+    filter_excludes!(miss2V, exclude);
+    miss1V = files_not_in_dir2(dir2, dir1);
+    filter_excludes!(miss1V, exclude);
     println(io, "\nComparing files by name in base directory\n  ",  cbd);
 
     relDir1 = relpath(dir1, cbd);
@@ -190,8 +192,6 @@ function filter_excludes!(v, exclude :: AbstractVector{T}) where T
         keepV = trues(size(v));
         for excl in exclude
             filter_excludes!(v, excl);
-            println(excl)
-            println(v)
         end
     end
     return nothing
