@@ -1,6 +1,6 @@
 module FilesLH
 
-using ArgCheck, DocStringExtensions, Parameters
+using ArgCheck, DocStringExtensions, Glob, Parameters;
 import Base.show
 import CommonLH: ask_yes_no
 
@@ -17,11 +17,14 @@ export ComputerList, defaultCompList
 export add_computer, remove_computer, current_computer, get_computer
 # Slurm
 export sbatch_commands
+# Compare images
+export compare_images;
 
-include("computers.jl")
-include("directories.jl")
-include("file_names.jl")
-include("file_transfer.jl")
-include("sbatch.jl")
+include("computers.jl");
+include("directories.jl");
+include("file_names.jl");
+include("file_transfer.jl");
+include("compare_images.jl");
+include("sbatch.jl");
 
 end # module
