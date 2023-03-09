@@ -6,6 +6,9 @@ function make_dir_test()
         isdir(d)  &&  rm(d);
         make_dir(d);
         @test isdir(d);
+
+        pd = parent_dir(d);
+        @test isdir(pd);
     end
 end
 

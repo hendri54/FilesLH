@@ -1,4 +1,14 @@
 """
+	$(SIGNATURES)
+
+Parent directory of an input directory.
+"""
+function parent_dir(inDir)
+    return normpath(joinpath(inDir, ".."))
+end
+
+
+"""
     $(SIGNATURES)
 
 Clear a directory and its sub-directories

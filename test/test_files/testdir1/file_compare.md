@@ -1,0 +1,7 @@
+**ad_shock_negative.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/ad_shock_negative.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/ad_shock_negative.pdf" width="550">**aggregate_supply.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/aggregate_supply.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/aggregate_supply.pdf" width="550">**as_ad.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/as_ad.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/as_ad.pdf" width="550">**as_ad_blank.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/as_ad_blank.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/as_ad_blank.pdf" width="550">**as_ad_demand_shocks.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/as_ad_demand_shocks.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/as_ad_demand_shocks.pdf" width="550">**asad_liquidity_trap.pdf** 
+<img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir2/asad_liquidity_trap.pdf" width="550"><img src="/Users/lutz/Documents/julia/FilesLH/test/test_files/testdir1/asad_liquidity_trap.pdf" width="550">

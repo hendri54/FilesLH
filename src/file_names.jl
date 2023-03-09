@@ -71,6 +71,20 @@ end
 """
 	$(SIGNATURES)
 
+Make an extension with leading period.
+"""
+function make_extension(fExt)
+    if first(fExt) == '.'
+        return fExt
+    else
+        return "." * fExt
+    end
+end
+
+
+"""
+	$(SIGNATURES)
+
 Add extension to a file, unless it already has one.
 """
 function add_extension(filePath :: AbstractString, newExt :: AbstractString)
