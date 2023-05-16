@@ -57,4 +57,8 @@ function file_transfer_test()
     end
 end
 
+@testset "File transfer" begin
+    file_transfer_test();
+end
+
 # --------------------

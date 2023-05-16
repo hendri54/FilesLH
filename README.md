@@ -6,6 +6,12 @@ Julia code related to file handling and file transfer.
 
 ## Change Log 2023
 
+May-16
+- fixed time zone problem with `seconds_since_modified`
+Apr-13
+- header for image comparison html (v1.2.1)
+Mar-20 
+- `seconds_since_modified`
 Mar-9 (v1.2)
 - `compare_images` now does file conversion and writes to html
 - file conversions via ghostscript

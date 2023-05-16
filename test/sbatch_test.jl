@@ -21,3 +21,7 @@ function sbatch_test()
 		# println(line)
 	end
 end
+
+@testset "SBatch" begin
+	sbatch_test();
+end

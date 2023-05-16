@@ -23,4 +23,8 @@ function computer_test()
     end
 end
 
+@testset "Computer" begin
+    computer_test();
+end
+
 # ------------
