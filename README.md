@@ -6,6 +6,8 @@ Julia code related to file handling and file transfer.
 
 ## Change Log 2023
 
+Jun-1
+- dependency updates (v1.4)
 May-16
 - fixed time zone problem with `seconds_since_modified`
 Apr-13
