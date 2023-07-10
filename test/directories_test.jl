@@ -13,6 +13,24 @@ function make_dir_test()
 end
 
 
+function list_sub_dirs_test()
+    @testset "List sub dirs" begin
+        @test isnothing(list_sub_dirs("/not/a dir"));
+
+        d = parent_dir(test_file_dir());
+        dList = list_sub_dirs(d);
+        @test !isnothing(dList);
+        for fDir in dList
+            @test isdir(fDir);
+        end
+
+        fDir = joinpath(test_file_dir(), "empty_dir");
+        isdir(fDir)  ||  mkpath(fDir);
+        @test isnothing(list_sub_dirs(fDir));
+    end
+end
+
+
 function right_dirs_test()
     @testset "Parent dirs" begin
         @test right_dirs("abc", 1) == "abc"
@@ -85,7 +103,8 @@ end
     @test is_dir_empty(tgDir)
 
     right_dirs_test();
-    files_in_dir_test()
+    files_in_dir_test();
+    list_sub_dirs_test();
     find_common_base_dir_test()
     filter_excludes_test();
 end

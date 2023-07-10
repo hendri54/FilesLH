@@ -8,7 +8,7 @@ import CommonLH: ask_yes_no
 # Directories
 export clear_directory, is_dir_empty, files_in_dir, files_not_in_dir2;
 export find_common_base_dir, dir_diff_report, make_dir, right_dirs;
-export parent_dir;
+export list_sub_dirs, parent_dir;
 # File info
 export date_modified, seconds_since_modified;
 # File names

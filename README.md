@@ -6,6 +6,8 @@ Julia code related to file handling and file transfer.
 
 ## Change Log 2023
 
+July-10
+- `list_sub_dirs`
 Jun-1
 - dependency updates (v1.4)
 May-16

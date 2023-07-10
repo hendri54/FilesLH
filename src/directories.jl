@@ -9,6 +9,25 @@ end
 
 
 """
+	$(SIGNATURES)
+
+List sub-directories of a directory. Return nothing if none or if input is not a directory.
+"""
+function list_sub_dirs(fDir)
+    isdir(fDir)  ||  return nothing;
+    dList = Vector{String}();
+    for d in readdir(fDir; join = true)
+        isdir(d)  &&  push!(dList, d);
+    end
+    if isempty(dList)
+        return nothing
+    else
+        return dList
+    end
+end
+
+
+"""
     $(SIGNATURES)
 
 Clear a directory and its sub-directories
