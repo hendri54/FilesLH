@@ -6,6 +6,8 @@ Julia code related to file handling and file transfer.
 
 ## Change Log 2023
 
+July-17
+- added `fileTransferSshStr` to `Computer`
 July-10
 - `list_sub_dirs`
 Jun-1

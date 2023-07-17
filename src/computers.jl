@@ -1,10 +1,16 @@
 """
 	Computer
+
+Contains the following info:
+- `sshStr`: something like "lhendri@longleaf.unc.edu". For login.
+- `fileTransferSshStr`: the same for file transfer.
+- `isRemote`: true to clusters that need to be accessed with ssh.
 """
 @with_kw struct Computer
 	name :: Symbol
 	homeDir :: String
 	sshStr :: String = ""
+	fileTransferSshStr :: String = ""
 	isRemote :: Bool = true
 end
 
@@ -13,6 +19,7 @@ computerLH = Computer(name = :LH, homeDir = "/Users/lutz", isRemote = false);
 computerLongleaf = Computer(name = :longleaf, 
 	homeDir = "/nas/longleaf/home/lhendri",
 	sshStr = "lhendri@longleaf.unc.edu",
+	fileTransferSshStr = "lhendri@rc-dm.its.unc.edu",
 	isRemote = true);
 
 defaultLocal = :LH;
