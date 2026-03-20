@@ -1,6 +1,6 @@
 module FilesLH
 
-using ArgCheck, Dates, DocStringExtensions, Downloads, Glob, Parameters;
+using ArgCheck, Dates, DelimitedFiles, DocStringExtensions, Downloads, Glob, Parameters;
 using TimeZones;
 import Base.show
 import CommonLH: ask_yes_no
@@ -28,7 +28,27 @@ export compare_images;
 # File conversions
 export convert_file;
 # Test
-export test_file_dir;
+export test_file_dir, test_dir;
+
+# --- Merged from LatexLH ---
+# Beamer
+export write_beamer_header, write_beamer_footer, typeset_file
+export write_figure_slide, figure_slide, table_slide;
+# Tables
+export CellColor, Cell
+export add_row!, color_string, cell_string, nrows, write_table
+# Parameter table
+export ParameterTable
+export add_row!
+# SymbolTable
+export SymbolTable, SymbolInfo
+export add_symbol!, has_symbol, newcommand, description, group, latex, load_from_csv!, erase!
+export write_preamble, write_notation_tex
+# Writing tex files and their pieces
+export write_doc, doc_header, doc_footer;
+export figure_comparison;
+export latex_table, latex_section, latex_figures, latex_figure, latex_line;
+export figures_side_by_side;
 
 include("computers.jl");
 include("directories.jl");
@@ -40,8 +60,19 @@ include("file_conversion.jl");
 include("download_from_web.jl");
 include("sbatch.jl");
 
+# --- Merged from LatexLH ---
+include("pieces.jl");
+include("write_doc.jl");
+include("table.jl");
+include("parameter_table.jl");
+include("symbol_info.jl");
+include("symbol_table.jl");
+include("beamer.jl");
+
 function test_file_dir()
     normpath(joinpath(@__DIR__, "..", "test", "test_files"));
 end
+
+test_dir() = test_file_dir();
 
 end # module

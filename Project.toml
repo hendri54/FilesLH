@@ -1,12 +1,13 @@
 name = "FilesLH"
 uuid = "69233b93-b644-4f5d-9b2e-8880c8b19068"
 authors = ["hendri54 <hendricksl@protonmail.com>"]
-version = "1.7"
+version = "1.8"
 
 [deps]
 ArgCheck = "dce04be8-c92d-5529-be00-80e4d2c0e197"
 CommonLH = "96c8dc4a-d23f-53b2-b478-aad5d5ab80bd"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
@@ -15,6 +16,7 @@ TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 
 [compat]
 ArgCheck = "2.1"
+DelimitedFiles = "1"
 Downloads = "1.6.0"
 Glob = "1"
 Parameters = "0.12"

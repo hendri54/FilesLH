@@ -17,6 +17,8 @@ include("test_setup.jl")
     include("file_names_test.jl");
     include("file_info_test.jl");
     include("download_from_web_test.jl");
+    # --- Tests merged from LatexLH ---
+    include("latex_test.jl");
 end
 
 # ----------------
