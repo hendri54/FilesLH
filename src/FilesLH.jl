@@ -1,6 +1,6 @@
 module FilesLH
 
-using ArgCheck, Dates, DocStringExtensions, Glob, Parameters;
+using ArgCheck, Dates, DocStringExtensions, Downloads, Glob, Parameters;
 using TimeZones;
 import Base.show
 import CommonLH: ask_yes_no
@@ -14,7 +14,8 @@ export date_modified, seconds_since_modified;
 # File names
 export add_extension, change_extension, has_extension, extensions_equal, filesep, paths_equal
 # File transfer
-export remote_copy, rsync_command, rsync_dir, git_upload_dir, make_remote_dir, deploy_docs
+export remote_copy, rsync_command, rsync_dir, git_upload_dir, make_remote_dir, deploy_docs;
+export download_with_metadata, get_file_source;
 # Computers
 export Computer, computerLH, computerLongleaf
 export home_dir, run_local, is_remote, common_base_dir, remote_and_local_path
@@ -36,6 +37,7 @@ include("file_names.jl");
 include("file_transfer.jl");
 include("compare_images.jl");
 include("file_conversion.jl");
+include("download_from_web.jl");
 include("sbatch.jl");
 
 function test_file_dir()

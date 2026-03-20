@@ -4,6 +4,12 @@ Julia code related to file handling and file transfer.
 
 [Documentation](lhendricks.org/julia/FilesLH/index.html).
 
+
+## Change Log 2025
+
+Aug-5 (v1.7)
+- `download_with_metadata` and `get_file_source`
+
 ## Change Log 2023
 
 July-17
